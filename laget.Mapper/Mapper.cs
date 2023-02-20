@@ -48,7 +48,7 @@ namespace laget.Mapper
         {
             var hash = MapperHash.Calculate<TSource, TResult>();
             if (Mappers.TryGetValue(hash, out var mapper))
-                throw new InvalidOperationException($"No mappers available to perform {typeof(TSource).GetType().Name} -> {typeof(TResult).Name}");
+                throw new InvalidOperationException($"No mappers available to perform {typeof(TSource).Name} -> {typeof(TResult).Name}");
 
             return (TResult)mapper.Map(source);
         }
