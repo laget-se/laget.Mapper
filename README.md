@@ -20,9 +20,9 @@ await Host.CreateDefaultBuilder()
 
 ## Usage
 ### Creating a mapper class
-To create a mapper class use the marker interface `IMapper` to mark the class and the `MapperMethodAttribute` attribute to mark all methods in the class that are mapping methods.
+To create a mapper class use the marker interface `IMapper` to mark the class and the `MapperMethod` attribute to mark all methods in the class that are mapping methods.
 
-The global mapper will pick up all classes tagged with the `IMapper` marker interface and register all methods tagged with the `MapperMethodAttribute` that match the following critera
+The global mapper will pick up all classes tagged with the `IMapper` marker interface and register all methods tagged with the `MapperMethod` that match the following critera
  - The method is not private
  - The method has a non void return value 
  - The method has only one parameter
@@ -30,48 +30,48 @@ The global mapper will pick up all classes tagged with the `IMapper` marker inte
 ```c#
 public class ModelMapper : IMapper 
 {
-    [MapperMethodAttribute] // Will be registered as the mapping method for converting Model -> Entity
+    [MapperMethod] // Will be registered as the mapping method for converting Model -> Entity
     public Entity ModelToEntity(Model model) => 
         new Entity 
         {
             // ...
         };
         
-    [MapperMethodAttribute] // Will be registered as the mapping method for converting Dto -> Model
+    [MapperMethod] // Will be registered as the mapping method for converting Dto -> Model
     public Model ModelFromDto(Dto dto) => 
         new Model 
         {
             // ...
         };
         
-    [MapperMethodAttribute] // Will not be registered as the mapping method for converting Dto -> Model is already defined above
+    [MapperMethod] // Will not be registered as the mapping method for converting Dto -> Model is already defined above
     public Model ModelFromDto2(Dto dto) => 
         new Model 
         {
             // ...
         };
         
-    // Will not be registered as it lacks the MapperMethodAttribute attribute
+    // Will not be registered as it lacks the MapperMethod attribute
     public Dto DtoFromModel(Model model) =>
         new Dto 
         {
             // ...
         };
     
-    [MapperMethodAttribute] // Will not be registered as it is a private method
+    [MapperMethod] // Will not be registered as it is a private method
     private Model ModelFromEntity(Entity entity) =>
         new Model 
         {
             // ...
         };
         
-    [MapperMethodAttribute] // Will not be registered as it returns void
+    [MapperMethod] // Will not be registered as it returns void
     public void UpdateModelState(Model model) { /* ... */ }
      
-    [MapperMethodAttribute] // Will not be registered as it doesn't take a parameter
+    [MapperMethod] // Will not be registered as it doesn't take a parameter
     public int GetConstantInt() => 42;
         
-    [MapperMethodAttribute] // Will not be registered as it takes multiple arguments
+    [MapperMethod] // Will not be registered as it takes multiple arguments
     public Model ModelFromEntityAndDto(Entity entity, Dto dto) =>
         new Model 
         {
