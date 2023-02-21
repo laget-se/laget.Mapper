@@ -1,5 +1,5 @@
 ﻿# laget.Mapper
-TODO...
+An extremely simple object-object mapper.
 
 ![Nuget](https://img.shields.io/nuget/v/laget.Mapper)
 ![Nuget](https://img.shields.io/nuget/dt/laget.Mapper)
