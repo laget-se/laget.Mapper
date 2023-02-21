@@ -11,13 +11,7 @@ namespace laget.Mapper
 {
     public static class Mapper
     {
-        private static ILogger<Mappings> _logger;
         private static readonly Dictionary<int, MapperMethodReference> Mappers = new Dictionary<int, MapperMethodReference>();
-
-        public static void RegisterLogger(ILogger<Mappings> logger = null)
-        {
-            _logger = logger ?? NullLogger<Mappings>.Instance;
-        }
 
         public static void RegisterMappers(IEnumerable<IMapper> mappers)
         {
@@ -34,14 +28,16 @@ namespace laget.Mapper
             {
                 var hash = MapperHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
                 if (Mappers.ContainsKey(hash))
-                {
-                    _logger?.LogError($"Multiple registration of mapper from {mapperMethod.GetParameters().First().ParameterType.Name} to {mapperMethod.ReturnType.Name}, {mapperMethod.Name} of {mapperMethod.DeclaringType?.Name} will be ignored");
-                    continue;
-                }
+                    throw new DuplicateMapperException(mapperMethod);
 
                 Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
             }
         }
+
+        /// <summary>
+        /// Resets the internal Dictionary, for testing only
+        /// </summary>
+        public static void Reset() => Mappers.Clear();
 
         public static TResult Map<TResult>(object source)
         {
@@ -72,11 +68,11 @@ namespace laget.Mapper
 
                     var returns = m.ReturnType;
                     if (returns == typeof(void))
-                        _logger?.LogError($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it returns void");
+                        throw new MapperReturnTypeVoidException(m);
 
                     var @params = m.GetParameters();
                     if (@params.Length != 1)
-                        _logger?.LogError($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it has {@params.Length} parameters when it should have 1");
+                        throw new MapperInvalidParametersException(m);
 
                     return returns != typeof(void) && @params.Length == 1;
                 });

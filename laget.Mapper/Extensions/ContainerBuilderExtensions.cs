@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using laget.Mapper.Core;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,7 +8,7 @@ namespace laget.Mapper.Extensions
 {
     public static class ContainerBuilderExtensions
     {
-        public static void RegisterMaps(this ContainerBuilder builder)
+        public static void RegisterMappers(this ContainerBuilder builder)
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
@@ -22,10 +21,7 @@ namespace laget.Mapper.Extensions
 
             builder.RegisterBuildCallback(c =>
             {
-                var logger = c.Resolve<ILogger<Mappings>>();
                 var mappers = c.Resolve<IEnumerable<IMapper>>();
-
-                Mapper.RegisterLogger(logger);
                 Mapper.RegisterMappers(mappers);
             });
         }

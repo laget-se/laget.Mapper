@@ -11,7 +11,7 @@ An extremely simple object-object mapper.
 await Host.CreateDefaultBuilder()
     .ConfigureContainer<ContainerBuilder>((context, builder) =>
     {
-        builder.RegisterMaps();
+        builder.RegisterMappers();
     })
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .Build()
@@ -79,26 +79,6 @@ public class ModelMapper : IMapper
         };
 }
 ```
-
-Then register the mapper class with Autofac
-
-```c#
-public class MapperModule : Module
-{
-    protected override void Load(ContainerBuilder builder)
-    {
-        builder.RegisterType<UserMapper>().As<IMapper>().SingleInstance();
-    }
-}
-```
-> Startup.cs
-```c#
-public void ConfigureContainer(ContainerBuilder builder)
-{
-    builder.RegisterModule<MapperModule>();
-}
-```
-
 
 ### Using the mapper
 The mapper can be used in different ways, either through direct access to the static method
