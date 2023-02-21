@@ -6,7 +6,15 @@ TODO...
 
 ## Configuration
 > This example is shown using Autofac since this is the go-to IoC for us.
-```c#
-```
 
 ## Usage
+```c#
+await Host.CreateDefaultBuilder()
+    .ConfigureContainer<ContainerBuilder>((context, builder) =>
+    {
+        builder.RegisterMaps();
+    })
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .Build()
+    .RunAsync();
+```

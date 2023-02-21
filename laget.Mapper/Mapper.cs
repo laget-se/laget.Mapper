@@ -1,7 +1,8 @@
 ﻿using laget.Mapper.Core;
 using laget.Mapper.Exceptions;
 using laget.Mapper.Util;
-using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +11,13 @@ namespace laget.Mapper
 {
     public static class Mapper
     {
+        private static ILogger<Mappings> _logger;
         private static readonly Dictionary<int, MapperMethodReference> Mappers = new Dictionary<int, MapperMethodReference>();
+
+        public static void RegisterLogger(ILogger<Mappings> logger = null)
+        {
+            _logger = logger ?? NullLogger<Mappings>.Instance;
+        }
 
         public static void RegisterMappers(IEnumerable<IMapper> mappers)
         {
@@ -28,7 +35,7 @@ namespace laget.Mapper
                 var hash = MapperHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
                 if (Mappers.ContainsKey(hash))
                 {
-                    Console.Error.WriteLine($"Multiple registration of mapper from {mapperMethod.GetParameters().First().ParameterType.Name} to {mapperMethod.ReturnType.Name}, {mapperMethod.Name} of {mapperMethod.DeclaringType?.Name} will be ignored");
+                    _logger?.LogError($"Multiple registration of mapper from {mapperMethod.GetParameters().First().ParameterType.Name} to {mapperMethod.ReturnType.Name}, {mapperMethod.Name} of {mapperMethod.DeclaringType?.Name} will be ignored");
                     continue;
                 }
 
@@ -48,7 +55,7 @@ namespace laget.Mapper
         public static TResult Map<TSource, TResult>(TSource source)
         {
             var hash = MapperHash.Calculate<TSource, TResult>();
-            if (Mappers.TryGetValue(hash, out var mapper))
+            if (!Mappers.TryGetValue(hash, out var mapper))
                 throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
             return (TResult)mapper.Map(source);
@@ -65,11 +72,11 @@ namespace laget.Mapper
 
                     var returns = m.ReturnType;
                     if (returns == typeof(void))
-                        Console.Error.WriteLine($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it returns void");
+                        _logger?.LogError($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it returns void");
 
                     var @params = m.GetParameters();
                     if (@params.Length != 1)
-                        Console.Error.WriteLine($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it has {@params.Length} parameters when it should have 1");
+                        _logger?.LogError($"Method {m.Name} of {m.DeclaringType?.Name} is not a valid Mapper as it has {@params.Length} parameters when it should have 1");
 
                     return returns != typeof(void) && @params.Length == 1;
                 });
