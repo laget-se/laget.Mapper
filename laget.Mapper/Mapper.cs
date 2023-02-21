@@ -1,4 +1,5 @@
 ﻿using laget.Mapper.Core;
+using laget.Mapper.Exceptions;
 using laget.Mapper.Util;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace laget.Mapper
         {
             var hash = MapperHash.Calculate(source.GetType(), typeof(TResult));
             if (!Mappers.TryGetValue(hash, out var mapper))
-                throw new InvalidOperationException($"No mappers available to perform {source.GetType().Name} -> {typeof(TResult).Name}");
+                throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
             return (TResult)mapper.Map(source);
         }
@@ -48,7 +49,7 @@ namespace laget.Mapper
         {
             var hash = MapperHash.Calculate<TSource, TResult>();
             if (Mappers.TryGetValue(hash, out var mapper))
-                throw new InvalidOperationException($"No mappers available to perform {typeof(TSource).Name} -> {typeof(TResult).Name}");
+                throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
             return (TResult)mapper.Map(source);
         }
