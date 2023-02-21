@@ -1,11 +1,6 @@
-using Castle.Core.Logging;
-using laget.Mapper.Core;
+﻿using laget.Mapper.Core;
 using laget.Mapper.Exceptions;
-using Microsoft.Extensions.Logging;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace laget.Mapper.Tests
@@ -126,7 +121,7 @@ namespace laget.Mapper.Tests
     public class MultipleParamMapper : IMapper
     {
         [MapperMethod]
-        public Dto DtoFromMultipleObjects(Model model, Entity entity) => new Dto { Id = model.Id + entity.Id}; 
+        public Dto DtoFromMultipleObjects(Model model, Entity entity) => new Dto { Id = model.Id + entity.Id };
     }
 
     public class ModelBase
