@@ -24,7 +24,7 @@ namespace laget.Mapper
             var mapperMethods = GetMapperMethods(mapper);
             foreach (var mapperMethod in mapperMethods)
             {
-                var hash = MapperHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
                 if (Mappers.ContainsKey(hash))
                     throw new DuplicateMapperException(mapperMethod);
 
@@ -39,7 +39,7 @@ namespace laget.Mapper
 
         public static TResult Map<TResult>(object source)
         {
-            var hash = MapperHash.Calculate(source.GetType(), typeof(TResult));
+            var hash = TypeHash.Calculate(source.GetType(), typeof(TResult));
             if (!Mappers.TryGetValue(hash, out var mapper))
                 throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
@@ -48,7 +48,7 @@ namespace laget.Mapper
 
         public static TResult Map<TSource, TResult>(TSource source)
         {
-            var hash = MapperHash.Calculate<TSource, TResult>();
+            var hash = TypeHash.Calculate<TSource, TResult>();
             if (!Mappers.TryGetValue(hash, out var mapper))
                 throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 

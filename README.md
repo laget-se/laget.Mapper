@@ -1,4 +1,4 @@
-# laget.Mapper
+﻿# laget.Mapper
 An extremely simple object-object mapper.
 
 ![Nuget](https://img.shields.io/nuget/v/laget.Mapper)
@@ -17,6 +17,34 @@ await Host.CreateDefaultBuilder()
     .Build()
     .RunAsync();
 ```
+
+This is the simplest way to register your mappers but also has some constraints:
+* The mapper implementations must exist in the program that calls `RegisterMappers`.
+* The mapper implementations must implement the interface `IMapper`.
+
+
+```c#
+await Host.CreateDefaultBuilder()
+    .ConfigureContainer<ContainerBuilder>((context, builder) =>
+    {
+        builder.RegisterMappers(_ =>
+        {
+            _.TheCallingAssembly();
+            _.TheCallingAssembly<T>();
+            _.AssemblyContainingType<T>();
+            _.Assembly("Mappers");
+        });
+    })
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .Build()
+    .RunAsync();
+```
+
+This is the advanced and more customizable way to register your mappers
+
+* `TheCallingAssembly();` will only register mapper implementations from the calling assembly that implements the interface `IMapper`.
+* `TheCallingAssembly<T>();` will only register mapper implementations from the calling assembly that implements the interface `T`.
+* `AssemblyContainingType<T>():` will only register mapper implementations from the assembly of the provided type, this is useful if you e.g. have class libraries with Mappers and/or custom implementations of `IMapper`.
 
 ## Usage
 ### Creating a mapper class
