@@ -42,9 +42,10 @@ await Host.CreateDefaultBuilder()
 
 This is the advanced and more customizable way to register your mappers
 
-* `TheCallingAssembly();` will only register mapper implementations from the calling assembly that implements the interface `IMapper`.
-* `TheCallingAssembly<T>();` will only register mapper implementations from the calling assembly that implements the interface `T`.
-* `AssemblyContainingType<T>():` will only register mapper implementations from the assembly of the provided type, this is useful if you e.g. have class libraries with Mappers and/or custom implementations of `IMapper`.
+* `TheCallingAssembly();` will register mapper implementations from the calling assembly that implements the interface `IMapper`.
+* `TheCallingAssembly<T>();` will register mapper implementations from the calling assembly that implements the interface `T`.
+* `AssemblyContainingType<T>();` will register mapper implementations from the assembly of the provided type, this is useful if you e.g. have class libraries with Mappers and/or custom implementations of `IMapper`.
+* `Assembly("name");` will register mapper implementations in the assembly, will load assembly via the name provided using `System.Reflection`, that implements the interface `IMapper`.
 
 ## Usage
 ### Creating a mapper class
