@@ -85,7 +85,7 @@ namespace laget.Mapper.Core
 
         private void Assembly(Assembly assembly, Type type)
         {
-            var hash = TypeHash.Calculate(assembly.GetType(), type);
+            var hash = TypeHash.Calculate(assembly, type);
 
             if (!_bindings.ContainsKey(hash))
                 _bindings.Add(hash, new TypeReference(assembly, type));
