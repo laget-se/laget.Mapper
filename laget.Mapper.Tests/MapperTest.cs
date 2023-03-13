@@ -1,5 +1,6 @@
-﻿using laget.Mapper.Core;
-using laget.Mapper.Exceptions;
+﻿using laget.Mapper.Exceptions;
+using laget.Mapper.Tests.Mappers;
+using laget.Mapper.Tests.Models;
 using System;
 using Xunit;
 
@@ -10,11 +11,6 @@ namespace laget.Mapper.Tests
         public MapperTest()
         {
             Mapper.RegisterMappers(new[] { new TestMapper() });
-        }
-
-        public void Dispose()
-        {
-            Mapper.Reset();
         }
 
         [Fact]
@@ -84,62 +80,10 @@ namespace laget.Mapper.Tests
         {
             Assert.Throws<MapperInvalidParametersException>(() => Mapper.RegisterMappers(new[] { new MultipleParamMapper() }));
         }
-    }
 
-    public class TestMapper : IMapper
-    {
-        [MapperMethod]
-        public Dto ModelToDto(Model model) => new Dto { Id = model.Id };
-
-        [MapperMethod]
-        public Dto ModelBaseToDto(ModelBase modelBase) => new Dto { Id = 100 * modelBase.Id };
-
-        [MapperMethod]
-        private Model EntityToModel(Entity entity) => new Model { Id = entity.Id };
-
-        public Entity ModelToEntity(Model model) => new Entity { Id = model.Id };
-    }
-
-    public class DuplicateMapper : IMapper
-    {
-        [MapperMethod]
-        public Dto ModelToDto(Model model) => new Dto { Id = model.Id * 10 };
-    }
-
-    public class ReturnTypeVoidMapper : IMapper
-    {
-        [MapperMethod]
-        public void PerformActionOnModel(Model model) => model.Id = 3;
-    }
-
-    public class NoParamMapper : IMapper
-    {
-        [MapperMethod]
-        public Dto ReturnStaticDto() => new Dto { Id = 0 };
-    }
-
-    public class MultipleParamMapper : IMapper
-    {
-        [MapperMethod]
-        public Dto DtoFromMultipleObjects(Model model, Entity entity) => new Dto { Id = model.Id + entity.Id };
-    }
-
-    public class ModelBase
-    {
-        public int Id { get; set; }
-    }
-
-    public class Model : ModelBase
-    {
-    }
-
-    public class Dto
-    {
-        public int Id { get; set; }
-    }
-
-    public class Entity
-    {
-        public int Id { get; set; }
+        public void Dispose()
+        {
+            Mapper.Reset();
+        }
     }
 }
