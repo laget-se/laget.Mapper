@@ -97,10 +97,10 @@ namespace laget.Mapper.Core
         /// </summary>
         public void Register()
         {
-            foreach (var (hash, reference) in _bindings)
+            foreach (var kvp in _bindings)
             {
-                _builder.RegisterAssemblyTypes(reference.Assembly)
-                    .AssignableTo(reference.Type)
+                _builder.RegisterAssemblyTypes(kvp.Value.Assembly)
+                    .AssignableTo(kvp.Value.Type)
                     .AsImplementedInterfaces();
             }
         }
