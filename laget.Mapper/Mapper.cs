@@ -1,6 +1,6 @@
 ﻿using laget.Mapper.Core;
 using laget.Mapper.Exceptions;
-using laget.Mapper.Util;
+using laget.Mapper.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;

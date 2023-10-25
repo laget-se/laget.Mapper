@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using laget.Mapper.Util;
+using laget.Mapper.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -32,10 +32,32 @@ namespace laget.Mapper.Core
         void TheCallingAssembly();
 
         /// <summary>
-        /// Add the executing Assembly to the scanning operation with a
+        /// Add the calling Assembly to the scanning operation with a
         /// custom type.
         /// </summary>
         void TheCallingAssembly<T>();
+
+        /// <summary>
+        /// Add the entry Assembly to the scanning operation
+        /// </summary>
+        void TheEntryAssembly();
+
+        /// <summary>
+        /// Add the executing Assembly to the scanning operation with a
+        /// custom type.
+        /// </summary>
+        void TheExecutingAssembly<T>();
+
+        /// <summary>
+        /// Add the executing Assembly to the scanning operation
+        /// </summary>
+        void TheExecutingAssembly();
+
+        /// <summary>
+        /// Add the entry Assembly to the scanning operation with a
+        /// custom type.
+        /// </summary>
+        void TheEntryAssembly<T>();
     }
 
     public class Registrator : IRegistrator
@@ -81,6 +103,26 @@ namespace laget.Mapper.Core
         public void TheCallingAssembly<T>()
         {
             Assembly(System.Reflection.Assembly.GetEntryAssembly(), typeof(T));
+        }
+
+        public void TheEntryAssembly()
+        {
+            Assembly(System.Reflection.Assembly.GetEntryAssembly(), typeof(IMapper));
+        }
+
+        public void TheEntryAssembly<T>()
+        {
+            Assembly(System.Reflection.Assembly.GetEntryAssembly(), typeof(T));
+        }
+
+        public void TheExecutingAssembly()
+        {
+            Assembly(System.Reflection.Assembly.GetExecutingAssembly(), typeof(IMapper));
+        }
+
+        public void TheExecutingAssembly<T>()
+        {
+            Assembly(System.Reflection.Assembly.GetExecutingAssembly(), typeof(T));
         }
 
         private void Assembly(Assembly assembly, Type type)

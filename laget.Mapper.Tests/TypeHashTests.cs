@@ -1,4 +1,4 @@
-﻿using laget.Mapper.Util;
+﻿using laget.Mapper.Utilities;
 using System.Reflection;
 using Xunit;
 

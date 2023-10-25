@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 
-namespace laget.Mapper.Util
+namespace laget.Mapper.Utilities
 {
-    public static class TypeHash
+    internal static class TypeHash
     {
         public static int Calculate<T1, T2>() => HashCode.Combine(typeof(T1).GetHashCode(), typeof(T2).GetHashCode());
         public static int Calculate<T1>(Type t2) => HashCode.Combine(typeof(T1).GetHashCode(), t2.GetHashCode());
