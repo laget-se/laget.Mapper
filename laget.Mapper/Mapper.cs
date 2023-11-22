@@ -15,11 +15,24 @@ namespace laget.Mapper
         {
             foreach (var mapper in mappers)
             {
-                LoadMapper(mapper);
+                RegisterMapper(mapper);
             }
         }
 
-        private static void LoadMapper(IMapper mapper)
+        public static void TryRegisterMapper(IMapper mapper)
+        {
+            var mapperMethods = GetMapperMethods(mapper);
+            foreach (var mapperMethod in mapperMethods)
+            {
+                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                if (Mappers.ContainsKey(hash))
+                    continue;
+
+                Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+            }
+        }
+
+        public static void RegisterMapper(IMapper mapper)
         {
             var mapperMethods = GetMapperMethods(mapper);
             foreach (var mapperMethod in mapperMethods)
