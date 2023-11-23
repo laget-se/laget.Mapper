@@ -11,6 +11,11 @@ namespace laget.Mapper
     {
         private static readonly Dictionary<int, MapperMethodReference> Mappers = new Dictionary<int, MapperMethodReference>();
 
+        /// <summary>
+        /// Register all mapper in the enumerable list.
+        /// </summary>
+        /// <param name="mappers">Implementations of IMapper</param>
+        /// <exception cref="DuplicateMapperException">If the mapper is already registered DuplicateMapperException will be thrown.</exception>
         public static void RegisterMappers(IEnumerable<IMapper> mappers)
         {
             foreach (var mapper in mappers)
@@ -19,19 +24,11 @@ namespace laget.Mapper
             }
         }
 
-        public static void TryRegisterMapper(IMapper mapper)
-        {
-            var mapperMethods = GetMapperMethods(mapper);
-            foreach (var mapperMethod in mapperMethods)
-            {
-                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
-                if (Mappers.ContainsKey(hash))
-                    continue;
-
-                Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
-            }
-        }
-
+        /// <summary>
+        /// Register the supplied mapper.
+        /// </summary>
+        /// <param name="mapper">Implementation of IMapper</param>
+        /// <exception cref="DuplicateMapperException">If the mapper is already registered DuplicateMapperException will be thrown.</exception>
         public static void RegisterMapper(IMapper mapper)
         {
             var mapperMethods = GetMapperMethods(mapper);
@@ -40,6 +37,35 @@ namespace laget.Mapper
                 var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
                 if (Mappers.ContainsKey(hash))
                     throw new DuplicateMapperException(mapperMethod);
+
+                Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+            }
+        }
+
+        /// <summary>
+        /// Register all mapper in the enumerable list.
+        /// </summary>
+        /// <param name="mappers">Implementations of IMapper</param>
+        public static void TryRegisterMappers(IEnumerable<IMapper> mappers)
+        {
+            foreach (var mapper in mappers)
+            {
+                TryRegisterMapper(mapper);
+            }
+        }
+
+        /// <summary>
+        /// Register the supplied mapper.
+        /// </summary>
+        /// <param name="mapper">Implementation of IMapper</param>
+        public static void TryRegisterMapper(IMapper mapper)
+        {
+            var mapperMethods = GetMapperMethods(mapper);
+            foreach (var mapperMethod in mapperMethods)
+            {
+                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                if (Mappers.ContainsKey(hash))
+                    continue;
 
                 Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
             }
