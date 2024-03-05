@@ -6,7 +6,7 @@ namespace laget.Mapper.Benchmarks.Mappers
     public class AddressMapper : IMapper
     {
         [MapperMethod]
-        public AddressDto Map(Address from) => new AddressDto()
+        public AddressDto Map(Address from) => new()
         {
             Id = from.Id,
             Street = from.Street,
@@ -16,7 +16,7 @@ namespace laget.Mapper.Benchmarks.Mappers
         };
 
         [MapperMethod]
-        public Address Map(AddressDto from) => new Address()
+        public Address Map(AddressDto from) => new()
         {
             Id = from.Id,
             Street = from.Street,
