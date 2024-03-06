@@ -131,21 +131,24 @@ Using the extensions is the recommended way as it provides a clean way of writin
 
 ## Benchmarks
 ```ini
-BenchmarkDotNet v0.13.12, Windows 11 (10.0.22631.3235/23H2/2023Update/SunValley3)
-AMD Ryzen Threadripper 3960X, 1 CPU, 48 logical and 24 physical cores
-.NET SDK 8.0.102
+BenchmarkDotNet v0.13.12, Windows 10 (10.0.19045.4123/22H2/2022Update) (VMware)
+AMD Ryzen Threadripper 3960X, 1 CPU, 12 logical and 12 physical cores
+.NET SDK 8.0.200
   [Host]     : .NET 6.0.27 (6.0.2724.6912), X64 RyuJIT AVX2
-  Job-RIOPDK : .NET 8.0.2 (8.0.224.6711), X64 RyuJIT AVX2
+  Job-BJZLVN : .NET 6.0.27 (6.0.2724.6912), X64 RyuJIT AVX2
+  Job-OQIHXW : .NET 8.0.2 (8.0.224.6711), X64 RyuJIT AVX2
 
-Runtime=.NET 8.0  IterationCount=50  LaunchCount=2  
-RunStrategy=Throughput  WarmupCount=10  
+IterationCount=10  LaunchCount=1  RunStrategy=Throughput  WarmupCount=5
 ```
 
 ### Mappings
-| Method                    | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
-|-------------------------- |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
-| Simple_Mapper             |    51.26 ns |  0.578 ns |  1.705 ns |    47.83 ns |    54.50 ns |    51.53 ns | 0.0172 |     144 B |
-| DeepType_Mapper           |   405.10 ns |  3.794 ns | 11.128 ns |   382.53 ns |   434.07 ns |   404.26 ns | 0.1411 |    1184 B |
+| Method                    | Runtime  | Mean      | Error     | StdDev    | Min       | Max       | Median    | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
+|-------------------------- |--------- |----------:|----------:|----------:|----------:|----------:|----------:|------:|--------:|-------:|----------:|------------:|
+| Benchmark_Simple_Mapper   | .NET 6.0 | 169.49 ns |  3.408 ns |  2.254 ns | 166.39 ns | 172.78 ns | 168.89 ns |  1.00 |    0.00 | 0.0172 |     144 B |        1.00 |
+| Benchmark_Simple_Mapper   | .NET 8.0 |  63.00 ns |  4.291 ns |  2.838 ns |  59.19 ns |  67.89 ns |  62.52 ns |  0.37 |    0.02 | 0.0172 |     144 B |        1.00 |
+|                           |          |           |           |           |           |           |           |       |         |        |           |             |
+| Benchmark_DeepType_Mapper | .NET 6.0 | 976.40 ns |  9.541 ns |  5.678 ns | 971.22 ns | 986.86 ns | 975.08 ns |  1.00 |    0.00 | 0.1411 |    1184 B |        1.00 |
+| Benchmark_DeepType_Mapper | .NET 8.0 | 461.82 ns | 27.469 ns | 18.169 ns | 433.24 ns | 488.14 ns | 466.44 ns |  0.48 |    0.02 | 0.1411 |    1184 B |        1.00 |
 
 ### Registration
 | Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
