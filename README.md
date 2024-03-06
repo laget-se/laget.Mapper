@@ -142,13 +142,13 @@ IterationCount=10  LaunchCount=1  RunStrategy=Throughput  WarmupCount=5
 ```
 
 ### Mappings
-| Method                    | Runtime  | Mean      | Error     | StdDev    | Min       | Max       | Median    | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
-|-------------------------- |--------- |----------:|----------:|----------:|----------:|----------:|----------:|------:|--------:|-------:|----------:|------------:|
-| Benchmark_Simple_Mapper   | .NET 6.0 | 169.49 ns |  3.408 ns |  2.254 ns | 166.39 ns | 172.78 ns | 168.89 ns |  1.00 |    0.00 | 0.0172 |     144 B |        1.00 |
-| Benchmark_Simple_Mapper   | .NET 8.0 |  63.00 ns |  4.291 ns |  2.838 ns |  59.19 ns |  67.89 ns |  62.52 ns |  0.37 |    0.02 | 0.0172 |     144 B |        1.00 |
-|                           |          |           |           |           |           |           |           |       |         |        |           |             |
-| Benchmark_DeepType_Mapper | .NET 6.0 | 976.40 ns |  9.541 ns |  5.678 ns | 971.22 ns | 986.86 ns | 975.08 ns |  1.00 |    0.00 | 0.1411 |    1184 B |        1.00 |
-| Benchmark_DeepType_Mapper | .NET 8.0 | 461.82 ns | 27.469 ns | 18.169 ns | 433.24 ns | 488.14 ns | 466.44 ns |  0.48 |    0.02 | 0.1411 |    1184 B |        1.00 |
+| Method          | Runtime  | Mean      | Error     | StdDev    | Min       | Max       | Median    | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
+|---------------- |--------- |----------:|----------:|----------:|----------:|----------:|----------:|------:|--------:|-------:|----------:|------------:|
+| Simple_Mapper   | .NET 6.0 | 169.49 ns |  3.408 ns |  2.254 ns | 166.39 ns | 172.78 ns | 168.89 ns |  1.00 |    0.00 | 0.0172 |     144 B |        1.00 |
+| Simple_Mapper   | .NET 8.0 |  63.00 ns |  4.291 ns |  2.838 ns |  59.19 ns |  67.89 ns |  62.52 ns |  0.37 |    0.02 | 0.0172 |     144 B |        1.00 |
+|                 |          |           |           |           |           |           |           |       |         |        |           |             |
+| DeepType_Mapper | .NET 6.0 | 976.40 ns |  9.541 ns |  5.678 ns | 971.22 ns | 986.86 ns | 975.08 ns |  1.00 |    0.00 | 0.1411 |    1184 B |        1.00 |
+| DeepType_Mapper | .NET 8.0 | 461.82 ns | 27.469 ns | 18.169 ns | 433.24 ns | 488.14 ns | 466.44 ns |  0.48 |    0.02 | 0.1411 |    1184 B |        1.00 |
 
 ### Registration
 | Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
