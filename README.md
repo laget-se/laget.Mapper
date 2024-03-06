@@ -130,7 +130,7 @@ var models = dtos.Map<Model>();
 Using the extensions is the recommended way as it provides a clean way of writing Linq chains, however it can be useful to access the mapper directly if you need to map based on an inherited class.
 
 ## Benchmarks
-```
+```ini
 BenchmarkDotNet v0.13.12, Windows 11 (10.0.22631.3235/23H2/2023Update/SunValley3)
 AMD Ryzen Threadripper 3960X, 1 CPU, 48 logical and 24 physical cores
 .NET SDK 8.0.102
