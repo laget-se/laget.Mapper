@@ -9,7 +9,8 @@ namespace laget.Mapper.Benchmarks
 {
     [MemoryDiagnoser]
     [MeanColumn, MinColumn, MaxColumn, MedianColumn]
-    [SimpleJob(RunStrategy.Throughput, RuntimeMoniker.Net80, 2, 10, 50)]
+    [SimpleJob(RunStrategy.Throughput, RuntimeMoniker.Net60, 1, 5, 10, baseline: true)]
+    [SimpleJob(RunStrategy.Throughput, RuntimeMoniker.Net80, 1, 5, 10)]
     public class RegistrationBenchmarks
     {
         [Benchmark]
