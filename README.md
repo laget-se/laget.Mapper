@@ -141,10 +141,15 @@ Runtime=.NET 8.0  IterationCount=50  LaunchCount=2
 RunStrategy=Throughput  WarmupCount=10  
 ```
 
+### Mappings
 | Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
 |------------------------------------ |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
 | Benchmark_Simple_Mapper             |    51.26 ns |  0.578 ns |  1.705 ns |    47.83 ns |    54.50 ns |    51.53 ns | 0.0172 |     144 B |
 | Benchmark_DeepType_Mapper           |   405.10 ns |  3.794 ns | 11.128 ns |   382.53 ns |   434.07 ns |   404.26 ns | 0.1411 |    1184 B |
+
+### Registration
+| Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
+|------------------------------------ |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
 | Single_Registration                 |    47.44 ns |  5.158 ns | 15.127 ns |    46.44 ns |    21.13 ns | 1,989.74 ns | 0.0839 |     720 B |
 | Multiple_Registration               |    72.98 ns | 13.068 ns | 38.532 ns |    75.02 ns |    85.02 ns | 4,160.33 ns | 0.1831 |    1568 B |
 | Assembly_Registration               |    52.25 ns |  2.468 ns |  7.160 ns |    52.30 ns |    36.57 ns | 1,076.43 ns | 0.0515 |     432 B |
