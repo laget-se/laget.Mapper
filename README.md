@@ -143,8 +143,8 @@ RunStrategy=Throughput  WarmupCount=10
 
 | Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
 |------------------------------------ |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
-| Simple_Mapper                       |    55.36 ns |  1.395 ns |  4.114 ns |    46.60 ns |    61.20 ns |    56.30 ns | 0.0172 |     144 B |
-| DeepType_Mapper                     |   402.72 ns |  3.512 ns | 10.354 ns |    84.62 ns |    21.94 ns |   404.56 ns | 0.1411 |    1184 B |
+| Benchmark_Simple_Mapper             |    51.26 ns |  0.578 ns |  1.705 ns |    47.83 ns |    54.50 ns |    51.53 ns | 0.0172 |     144 B |
+| Benchmark_DeepType_Mapper           |   405.10 ns |  3.794 ns | 11.128 ns |   382.53 ns |   434.07 ns |   404.26 ns | 0.1411 |    1184 B |
 | Single_Registration                 |    47.44 ns |  5.158 ns | 15.127 ns |    46.44 ns |    21.13 ns | 1,989.74 ns | 0.0839 |     720 B |
 | Multiple_Registration               |    72.98 ns | 13.068 ns | 38.532 ns |    75.02 ns |    85.02 ns | 4,160.33 ns | 0.1831 |    1568 B |
 | Assembly_Registration               |    52.25 ns |  2.468 ns |  7.160 ns |    52.30 ns |    36.57 ns | 1,076.43 ns | 0.0515 |     432 B |
