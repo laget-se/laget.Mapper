@@ -142,10 +142,10 @@ RunStrategy=Throughput  WarmupCount=10
 ```
 
 ### Mappings
-| Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
-|------------------------------------ |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
-| Benchmark_Simple_Mapper             |    51.26 ns |  0.578 ns |  1.705 ns |    47.83 ns |    54.50 ns |    51.53 ns | 0.0172 |     144 B |
-| Benchmark_DeepType_Mapper           |   405.10 ns |  3.794 ns | 11.128 ns |   382.53 ns |   434.07 ns |   404.26 ns | 0.1411 |    1184 B |
+| Method                    | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
+|-------------------------- |------------:|----------:|----------:|------------:|------------:|------------:|-------:|----------:|
+| Simple_Mapper             |    51.26 ns |  0.578 ns |  1.705 ns |    47.83 ns |    54.50 ns |    51.53 ns | 0.0172 |     144 B |
+| DeepType_Mapper           |   405.10 ns |  3.794 ns | 11.128 ns |   382.53 ns |   434.07 ns |   404.26 ns | 0.1411 |    1184 B |
 
 ### Registration
 | Method                              | Mean        | Error     | StdDev    | Min         | Max         | Median      | Gen0   | Allocated |
