@@ -1,7 +1,9 @@
 ﻿using laget.Mapper.Core;
 using laget.Mapper.Exceptions;
 using laget.Mapper.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -63,11 +65,18 @@ namespace laget.Mapper
             var mapperMethods = GetMapperMethods(mapper);
             foreach (var mapperMethod in mapperMethods)
             {
-                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
-                if (Mappers.ContainsKey(hash))
-                    continue;
+                try
+                {
+                    var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                    if (Mappers.ContainsKey(hash))
+                        continue;
 
-                Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+                    Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+                }
+                catch (ArgumentException ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
         }
 
