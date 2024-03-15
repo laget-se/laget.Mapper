@@ -2,6 +2,7 @@
 using laget.Mapper.Exceptions;
 using laget.Mapper.Utilities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace laget.Mapper
 {
     public static class Mapper
     {
-        private static readonly Dictionary<int, MapperMethodReference> Mappers = new Dictionary<int, MapperMethodReference>();
+        private static readonly ConcurrentDictionary<int, MapperMethodReference> Mappers = new ConcurrentDictionary<int, MapperMethodReference>();
 
         /// <summary>
         /// Register all mapper in the enumerable list.
@@ -40,7 +41,7 @@ namespace laget.Mapper
                 if (Mappers.ContainsKey(hash))
                     throw new DuplicateMapperException(mapperMethod);
 
-                Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+                Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod));
             }
         }
 
@@ -71,7 +72,7 @@ namespace laget.Mapper
                     if (Mappers.ContainsKey(hash))
                         continue;
 
-                    Mappers.Add(hash, new MapperMethodReference(mapper, mapperMethod));
+                    Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod));
                 }
                 catch (ArgumentException ex)
                 {
