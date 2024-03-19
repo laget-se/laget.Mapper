@@ -1,7 +1,10 @@
-﻿using laget.Mapper.Exceptions;
+﻿using laget.Mapper.Core;
+using laget.Mapper.Exceptions;
 using laget.Mapper.Tests.Mappers;
 using laget.Mapper.Tests.Models;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace laget.Mapper.Tests
@@ -79,6 +82,23 @@ namespace laget.Mapper.Tests
         public void MapperThrowsExceptionWhenRegisteringMappingFunctionsWithMultipleParameters()
         {
             Assert.Throws<MapperInvalidParametersException>(() => Mapper.RegisterMappers(new[] { new MultipleParamMapper() }));
+        }
+
+        [Fact]
+        public void RegisterMapperShouldBeThreadSafe()
+        {
+            var mappers = new List<IMapper>
+            {
+                new TestMapper()
+            };
+            var threads = new int[1000];
+
+            Parallel.ForEach(threads, thread =>
+            {
+                Mapper.TryRegisterMappers(mappers);
+            });
+
+            Assert.NotEqual(0, Mapper.Count);
         }
 
         public void Dispose()

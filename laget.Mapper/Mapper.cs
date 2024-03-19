@@ -34,14 +34,17 @@ namespace laget.Mapper
         /// <exception cref="DuplicateMapperException">If the mapper is already registered DuplicateMapperException will be thrown.</exception>
         public static void RegisterMapper(IMapper mapper)
         {
-            var mapperMethods = GetMapperMethods(mapper);
-            foreach (var mapperMethod in mapperMethods)
+            lock (Mappers)
             {
-                var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
-                if (Mappers.ContainsKey(hash))
-                    throw new DuplicateMapperException(mapperMethod);
+                var mapperMethods = GetMapperMethods(mapper);
+                foreach (var mapperMethod in mapperMethods)
+                {
+                    var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                    if (Mappers.ContainsKey(hash))
+                        throw new DuplicateMapperException(mapperMethod);
 
-                Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod));
+                    Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod));
+                }
             }
         }
 
@@ -63,20 +66,46 @@ namespace laget.Mapper
         /// <param name="mapper">Implementation of IMapper</param>
         public static void TryRegisterMapper(IMapper mapper)
         {
-            var mapperMethods = GetMapperMethods(mapper);
-            foreach (var mapperMethod in mapperMethods)
+            lock (Mappers)
             {
-                try
+                var mapperMethods = GetMapperMethods(mapper);
+                foreach (var mapperMethod in mapperMethods)
                 {
-                    var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
-                    if (Mappers.ContainsKey(hash))
-                        continue;
+                    try
+                    {
+                        var hash = TypeHash.Calculate(mapperMethod.GetParameters().First().ParameterType, mapperMethod.ReturnType);
+                        if (Mappers.ContainsKey(hash))
+                            continue;
 
-                    Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod));
+                        if (Mappers.TryAdd(hash, new MapperMethodReference(mapper, mapperMethod)))
+                        {
+                            Debug.WriteLine($"Added mapper {nameof(mapper)} (Hash='{hash}')");
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"Mapper {nameof(mapper)} was already added (Hash='{hash}')");
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+
                 }
-                catch (ArgumentException ex)
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of key/value pairs contained in the <see
+        /// cref="ConcurrentDictionary{TKey,TValue}"/>.
+        /// </summary>
+        public static int Count
+        {
+            get
+            {
+                lock (Mappers)
                 {
-                    Debug.WriteLine(ex.Message);
+                    return Mappers.Count;
                 }
             }
         }
@@ -84,24 +113,36 @@ namespace laget.Mapper
         /// <summary>
         /// Resets the internal Dictionary, for testing only
         /// </summary>
-        public static void Reset() => Mappers.Clear();
+        public static void Reset()
+        {
+            lock (Mappers)
+            {
+                Mappers.Clear();
+            }
+        }
 
         public static TResult Map<TResult>(object source)
         {
-            var hash = TypeHash.Calculate(source.GetType(), typeof(TResult));
-            if (!Mappers.TryGetValue(hash, out var mapper))
-                throw new MapperNotFoundException(source.GetType(), typeof(TResult));
+            lock (Mappers)
+            {
+                var hash = TypeHash.Calculate(source.GetType(), typeof(TResult));
+                if (!Mappers.TryGetValue(hash, out var mapper))
+                    throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
-            return (TResult)mapper.Map(source);
+                return (TResult)mapper.Map(source);
+            }
         }
 
         public static TResult Map<TSource, TResult>(TSource source)
         {
-            var hash = TypeHash.Calculate<TSource, TResult>();
-            if (!Mappers.TryGetValue(hash, out var mapper))
-                throw new MapperNotFoundException(source.GetType(), typeof(TResult));
+            lock (Mappers)
+            {
+                var hash = TypeHash.Calculate<TSource, TResult>();
+                if (!Mappers.TryGetValue(hash, out var mapper))
+                    throw new MapperNotFoundException(source.GetType(), typeof(TResult));
 
-            return (TResult)mapper.Map(source);
+                return (TResult)mapper.Map(source);
+            }
         }
 
         private static IEnumerable<MethodInfo> GetMapperMethods(IMapper mapper) =>
